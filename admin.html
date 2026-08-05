@@ -2,52 +2,62 @@
 <html lang="ja"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0a0c0d">
+<meta name="theme-color" content="#0d0b09">
 <title>管理画面</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#0a0c0d;color:#e9eceb;min-height:100dvh;padding:20px;
-font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
-.wrap{max-width:640px;margin:0 auto}
-h1{font-size:15px;letter-spacing:.2em;color:#8a8f8c;font-weight:500;text-align:center;margin:8px 0 20px}
-h2{font-size:13px;letter-spacing:.14em;color:#e0b13f;font-weight:600;margin:26px 0 12px;
-border-bottom:1px solid #262b29;padding-bottom:8px}
-label{display:block;font-size:14px;color:#9ba39f;margin:14px 0 8px}
+body{margin:0;color:#f3efe8;min-height:100dvh;padding:20px;position:relative;
+font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+background:#0d0b09 url('./IMG_1119.jpeg') center/cover no-repeat fixed}
+body::before{content:'';position:fixed;inset:0;
+background:linear-gradient(180deg,rgba(8,7,6,.62) 0%,rgba(8,7,6,.5) 45%,rgba(8,7,6,.72) 100%)}
+.wrap{max-width:640px;margin:0 auto;position:relative;z-index:1}
+.logo{display:block;width:100%;max-width:190px;margin:6px auto 18px;
+filter:drop-shadow(0 3px 16px rgba(0,0,0,.95))}
+h2{font-size:13px;letter-spacing:.14em;color:#c9a961;font-weight:600;margin:26px 0 12px;
+border-bottom:1px solid rgba(210,190,150,.24);padding-bottom:8px;
+text-shadow:0 2px 10px rgba(0,0,0,1)}
+label{display:block;font-size:14px;color:#d6cec2;margin:14px 0 8px;
+text-shadow:0 2px 10px rgba(0,0,0,1)}
 input{width:100%;font-size:17px;padding:15px;border-radius:12px;
-border:1px solid #262b29;background:#131615;color:#fff}
-input:focus{outline:none;border-color:#e0b13f}
+border:1px solid rgba(210,190,150,.32);background:rgba(12,11,10,.75);color:#fff;
+backdrop-filter:blur(10px)}
+input:focus{outline:none;border-color:#c9a961}
 button{font-size:17px;font-weight:700;padding:17px;border:none;border-radius:13px;
-margin-top:16px;color:#1a1204;background:#e0b13f;width:100%}
-button.sub{background:#161a19;color:#a6afab;border:1px solid #2c322f;
-font-size:12px;padding:9px 13px;width:auto;margin:0}
-button.out{background:#1e100e;color:#d05a4e;border:1px solid #4c2320}
-.nav{display:flex;gap:8px;justify-content:center;margin-bottom:10px;flex-wrap:wrap}
-.nav a{font-size:13px;color:#a6afab;background:#161a19;border:1px solid #2c322f;
-border-radius:9px;padding:9px 14px;text-decoration:none}
-.nav a.on{background:#e0b13f;color:#1a1204;border-color:#e0b13f}
-.row{background:#131615;border:1px solid #262b29;border-radius:13px;
-padding:15px 16px;margin-bottom:9px}
+margin-top:16px;color:#17120a;background:#c9a961;width:100%;
+box-shadow:0 6px 22px rgba(0,0,0,.6)}
+button.sub{background:rgba(14,13,11,.78);color:#cdc4b6;
+border:1px solid rgba(210,190,150,.28);font-size:12px;padding:9px 13px;width:auto;
+margin:0;box-shadow:none;backdrop-filter:blur(10px)}
+button.out{background:rgba(40,16,14,.85);color:#f08a80;border:1px solid #6b2f2a}
+.nav{display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.nav a{font-size:13px;color:#cdc4b6;background:rgba(14,13,11,.78);
+border:1px solid rgba(210,190,150,.28);border-radius:9px;padding:9px 14px;
+text-decoration:none;backdrop-filter:blur(10px)}
+.nav a.on{background:#c9a961;color:#17120a;border-color:#c9a961}
+.row{background:rgba(13,12,11,.78);border:1px solid rgba(210,190,150,.2);
+border-radius:13px;padding:15px 16px;margin-bottom:9px;backdrop-filter:blur(10px)}
 .row .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .nm{font-size:18px;font-weight:600}
-.tm{font-size:17px;color:#e0b13f;font-variant-numeric:tabular-nums}
-.dur{font-size:13px;color:#7b8380;margin-top:5px}
-.tag{font-size:11px;color:#c98b6b;border:1px solid #5c3a2a;border-radius:5px;
+.tm{font-size:17px;color:#e0c07a;font-variant-numeric:tabular-nums}
+.dur{font-size:13px;color:#a89e90;margin-top:5px}
+.tag{font-size:11px;color:#e0a37a;border:1px solid #6b4630;border-radius:5px;
 padding:2px 6px;margin-left:7px;vertical-align:2px}
 .pics{display:flex;gap:9px;margin-top:12px}
 .pics div{flex:1}
-.pics span{font-size:11px;color:#7b8380;display:block;margin-bottom:5px}
-.pics img{width:100%;border-radius:9px;display:block;background:#1c211f}
+.pics span{font-size:11px;color:#a89e90;display:block;margin-bottom:5px}
+.pics img{width:100%;border-radius:9px;display:block;background:#1c1917}
 .acts{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
-.empty{color:#5f6764;font-size:14px;padding:6px 2px}
+.empty{color:#8a8276;font-size:14px;padding:6px 2px}
 .bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.st{font-size:11px;color:#5f6764}
-.err{color:#ef8272;font-size:14px;margin-top:12px;text-align:center;line-height:1.6}
+.st{font-size:11px;color:#a89e90;text-shadow:0 2px 8px rgba(0,0,0,1)}
+.err{color:#ffa294;font-size:14px;margin-top:12px;text-align:center;line-height:1.6}
 .hide{display:none}
 </style></head>
 <body><div class="wrap">
 
 <div id="v-login">
-<h1>管理画面</h1>
+<img class="logo" src="./IMG_1043.jpeg" alt="">
 <label>メールアドレス</label>
 <input type="email" id="em" autocomplete="username" autocapitalize="none" spellcheck="false">
 <label>パスワード</label>
@@ -57,7 +67,7 @@ padding:2px 6px;margin-left:7px;vertical-align:2px}
 </div>
 
 <div id="v-main" class="hide">
-<h1 id="store">管理画面</h1>
+<img class="logo" src="./IMG_1043.jpeg" alt="">
 <div class="nav">
 <a href="./admin.html" class="on">本日</a>
 <a href="./history.html">履歴</a>
@@ -96,11 +106,10 @@ function hm(ts) {
   }).format(new Date(ts));
 }
 function ymdhm(ts) {
-  const p = new Intl.DateTimeFormat('sv-SE', {
+  return new Intl.DateTimeFormat('sv-SE', {
     timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit',
     hour: '2-digit', minute: '2-digit', hour12: false
-  }).format(new Date(ts));
-  return p.slice(0, 16);
+  }).format(new Date(ts)).slice(0, 16);
 }
 function dur(a, b) {
   const s = Math.floor((new Date(b) - new Date(a)) / 1000);
@@ -124,8 +133,6 @@ $('logout').onclick = async () => { await sb.auth.signOut(); location.reload(); 
 async function start() {
   $('v-login').classList.add('hide');
   $('v-main').classList.remove('hide');
-  const { data: s } = await sb.from('stores').select('name').limit(1).maybeSingle();
-  if (s) $('store').textContent = s.name;
   await load();
   sb.channel('att')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'attendances' }, load)
@@ -142,8 +149,8 @@ async function pic(path) {
 async function fix(r, field) {
   const cur = field === 'clock_in_at' ? r.clock_in_at : r.clock_out_at;
   const label = field === 'clock_in_at' ? '出勤時刻' : '退勤時刻';
-  const def = cur ? ymdhm(cur) : ymdhm(new Date());
-  const v = prompt(label + 'を修正（YYYY-MM-DD HH:MM）', def.replace('T', ' '));
+  const def = (cur ? ymdhm(cur) : ymdhm(new Date())).replace('T', ' ');
+  const v = prompt(label + 'を修正（YYYY-MM-DD HH:MM）', def);
   if (!v) return;
   const reason = prompt('修正理由（任意）', '') ?? '';
   const { data, error } = await sb.rpc('admin_fix_time', {
