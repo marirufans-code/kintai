@@ -16,8 +16,7 @@ input[type=text]{width:100%;font-size:24px;padding:18px;border-radius:14px;
 border:1px solid #222b30;background:#121719;color:#fff}
 input[type=text]:focus{outline:none;border-color:#6f9fb8}
 button{width:100%;font-size:22px;font-weight:700;padding:24px;border:none;
-border-radius:16px;margin-top:14px}
-button.next{background:#6f9fb8;color:#061016}
+border-radius:16px;margin-top:14px;background:#6f9fb8;color:#061016}
 button.in{background:#4fb98a;color:#04150e}
 button.out{background:#d99a4e;color:#1a1004}
 button.name{background:#121719;color:#e7edf0;border:1px solid #29343a;
@@ -45,7 +44,7 @@ font-size:14px;color:#dcc39e;margin-bottom:18px;line-height:1.6}
 <div id="v-name">
 <label>お名前</label>
 <input type="text" id="nm" autocomplete="off" placeholder="例：山田花子">
-<button id="go" class="next">次へ</button>
+<button id="go">次へ</button>
 <button id="toPick" class="sub hide">一覧から選ぶ</button>
 <div class="err" id="e1"></div>
 </div>
@@ -64,7 +63,7 @@ font-size:14px;color:#dcc39e;margin-bottom:18px;line-height:1.6}
 <div class="frame" id="frame">タップして撮影</div>
 <input type="file" accept="image/*" capture="user" id="cam" class="hide">
 <button id="shoot" class="sub">写真を撮る</button>
-<button id="act" class="in" disabled>出勤する</button>
+<button id="act" disabled>出勤する</button>
 <button id="back" class="sub">戻る</button>
 <div class="err" id="e2"></div>
 </div>
@@ -84,6 +83,10 @@ function show(v){['v-name','v-pick','v-act','v-done'].forEach(function(x){
 function post(fn,b){b.token=token;return fetch(BASE+fn,{method:'POST',
   headers:{'content-type':'application/json'},body:JSON.stringify(b)})
   .then(function(r){return r.json()})}
+function tone(el,t){
+  el.classList.remove('in','out');
+  if(t)el.classList.add(t);
+}
 
 post('names',{}).then(function(d){
   if(d.store_name)$('store').textContent=d.store_name;
@@ -124,10 +127,10 @@ function checkState(){
     $('act').classList.remove('hide');
     if(d.state==='none'){mode='in';
       $('stat').textContent='写真を撮って出勤してください';
-      $('act').textContent='出勤する';$('act').className='in'}
+      $('act').textContent='出勤する';tone($('act'),'in')}
     else if(d.state==='working'){mode='out';
       $('stat').innerHTML='現在出勤中です（'+d.clock_in+'）<br>退勤する場合はこちら';
-      $('act').textContent='退勤する';$('act').className='out'}
+      $('act').textContent='退勤する';tone($('act'),'out')}
     else{mode='';
       $('stat').innerHTML='本日の勤務は終了しています<br>'+d.clock_in+' → '+d.clock_out;
       $('frame').classList.add('hide');
@@ -171,10 +174,10 @@ $('act').onclick=function(){
         photo_too_large:'写真が大きすぎます',
         invalid_token:'QRコードが正しくありません'};
       $('e2').textContent=m[d.error]||'エラーが発生しました';return}
-    if(mode==='in'){$('d1').className='big in';
+    if(mode==='in'){tone($('d1'),'in');
       $('d1').textContent='出勤しました';
       $('d2').textContent=d.name+'　'+d.time}
-    else{$('d1').className='big out';
+    else{tone($('d1'),'out');
       $('d1').textContent='退勤しました';
       $('d2').innerHTML=d.name+'　'+d.time+'<br>本日の勤務時間：'
       +d.hours+'時間'+d.minutes+'分'}
