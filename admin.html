@@ -1,184 +1,43 @@
 <!doctype html>
 <html lang="ja"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0b0d">
-<title>管理画面</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>診断</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#0b0b0d;color:#f2ece1;min-height:100dvh;padding:20px;
-font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
-.wrap{max-width:640px;margin:0 auto}
-h1{font-size:15px;letter-spacing:.2em;color:#8a8578;font-weight:500;text-align:center;margin:8px 0 24px}
-h2{font-size:13px;letter-spacing:.14em;color:#d4a556;font-weight:600;margin:28px 0 12px;
-border-bottom:1px solid #26262b;padding-bottom:8px}
-label{display:block;font-size:14px;color:#a9a396;margin:14px 0 8px}
-input{width:100%;font-size:17px;padding:15px;border-radius:12px;
-border:1px solid #2a2a2e;background:#151518;color:#fff}
-input:focus{outline:none;border-color:#d4a556}
-button{font-size:17px;font-weight:700;padding:17px;border:none;border-radius:13px;
-margin-top:16px;color:#0b0b0d;background:#d4a556;width:100%}
-button.sub{background:#1e1e22;color:#c9c3b7;border:1px solid #33333a;
-font-size:13px;padding:10px;width:auto;margin:0}
-.row{background:#141417;border:1px solid #26262b;border-radius:13px;
-padding:15px 16px;margin-bottom:9px}
-.row .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.nm{font-size:18px;font-weight:600}
-.tm{font-size:17px;color:#d4a556;font-variant-numeric:tabular-nums}
-.dur{font-size:13px;color:#7d786f;margin-top:5px}
-.tag{font-size:11px;color:#c98b6b;border:1px solid #5c3a2a;border-radius:5px;
-padding:2px 6px;margin-left:7px;vertical-align:2px}
-.pics{display:flex;gap:9px;margin-top:12px}
-.pics div{flex:1}
-.pics span{font-size:11px;color:#7d786f;display:block;margin-bottom:5px}
-.pics img{width:100%;border-radius:9px;display:block;background:#1e1e22}
-.empty{color:#5e5a53;font-size:14px;padding:6px 2px}
-.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.st{font-size:11px;color:#5e5a53}
-.err{color:#f0806f;font-size:14px;margin-top:12px;text-align:center;line-height:1.6}
-.hide{display:none}
+body{margin:0;padding:20px;background:#0b0b0d;color:#f2ece1;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:15px}
+input{width:100%;font-size:17px;padding:14px;border-radius:12px;
+border:1px solid #2a2a2e;background:#151518;color:#fff;margin-bottom:12px}
+button{width:100%;font-size:17px;font-weight:700;padding:16px;border:none;
+border-radius:12px;color:#0b0b0d;background:#d4a556}
+pre{white-space:pre-wrap;word-break:break-all;background:#151518;
+border:1px solid #2a2a2e;border-radius:12px;padding:14px;margin-top:18px;
+font-size:13px;line-height:1.6;color:#e2c9a4}
 </style></head>
-<body><div class="wrap">
-
-<div id="v-login">
-<h1>管理画面</h1>
-<label>メールアドレス</label>
-<input type="email" id="em" autocomplete="username" autocapitalize="none" spellcheck="false">
-<label>パスワード</label>
-<input type="password" id="pw" autocomplete="current-password">
-<button id="login">ログイン</button>
-<div class="err" id="e1"></div>
-</div>
-
-<div id="v-main" class="hide">
-<h1 id="store">管理画面</h1>
-<div class="bar">
-<span class="st" id="st"></span>
-<button class="sub" id="logout">ログアウト</button>
-</div>
-<h2>現在出勤中</h2>
-<div id="working"></div>
-<h2>退勤済</h2>
-<div id="done"></div>
-</div>
-
-</div>
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
-const sb = createClient(
-  'https://xloffcmacznuhllhendx.supabase.co',
-  'sb_publishable_ApQmKKzTizl3EbFPpcJ15w_685w7d-8'
-);
-
-const $ = (i) => document.getElementById(i);
-const open = new Set();
-
-function bizDate() {
-  const d = new Date(Date.now() - 8 * 3600 * 1000);
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(d);
-}
-function hm(ts) {
-  return new Intl.DateTimeFormat('ja-JP', {
-    timeZone: 'Asia/Tokyo', hour: '2-digit', minute: '2-digit', hour12: false
-  }).format(new Date(ts));
-}
-function dur(a, b) {
-  const s = Math.floor((new Date(b) - new Date(a)) / 1000);
-  return Math.floor(s / 3600) + '時間' + Math.floor((s % 3600) / 60) + '分';
-}
-
-$('login').onclick = async () => {
-  $('e1').textContent = '';
-  $('login').disabled = true;
+<body>
+<input type="email" id="em" value="sekiya.nft@gmail.com" autocapitalize="none">
+<input type="text" id="pw" value="Kintai2026bar" autocapitalize="none">
+<button id="go">ログイン診断</button>
+<pre id="out">ここに結果が出ます</pre>
+<script>
+document.getElementById('go').onclick = async function () {
+  var out = document.getElementById('out');
+  out.textContent = '通信中...';
+  var url = 'https://xloffcmacznuhllhendx.supabase.co/auth/v1/token?grant_type=password';
+  var key = 'sb_publishable_ApQmKKzTizl3EbFPpcJ15w_685w7d-8';
   try {
-    const { error } = await sb.auth.signInWithPassword({
-      email: $('em').value.trim().toLowerCase(), password: $('pw').value
+    var r = await fetch(url, {
+      method: 'POST',
+      headers: { 'apikey': key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: document.getElementById('em').value.trim(),
+        password: document.getElementById('pw').value
+      })
     });
-    if (error) { $('e1').textContent = error.message; return; }
-    await start();
+    var t = await r.text();
+    out.textContent = 'HTTP ' + r.status + '\n\n' + t.slice(0, 800);
   } catch (e) {
-    $('e1').textContent = String(e);
-  } finally {
-    $('login').disabled = false;
+    out.textContent = '通信エラー: ' + e;
   }
 };
-
-$('logout').onclick = async () => {
-  await sb.auth.signOut();
-  location.reload();
-};
-
-async function start() {
-  $('v-login').classList.add('hide');
-  $('v-main').classList.remove('hide');
-  const { data: s } = await sb.from('stores').select('name').limit(1).maybeSingle();
-  if (s) $('store').textContent = s.name;
-  await load();
-  sb.channel('att')
-    .on('postgres_changes',
-      { event: '*', schema: 'public', table: 'attendances' }, load)
-    .subscribe();
-  setInterval(load, 15000);
-}
-
-async function pic(path) {
-  if (!path) return null;
-  const { data } = await sb.storage
-    .from('attendance-photos').createSignedUrl(path, 300);
-  return data ? data.signedUrl : null;
-}
-
-async function load() {
-  const { data, error } = await sb.from('attendances')
-    .select('*').eq('business_date', bizDate()).order('clock_in_at');
-  if (error) { $('st').textContent = '読み込みエラー: ' + error.message; return; }
-
-  const w = data.filter((r) => r.status === 'working');
-  const d = data.filter((r) => r.status !== 'working');
-
-  $('st').textContent = '更新 ' + hm(new Date()) + '　出勤中 ' + w.length + '名';
-  $('working').innerHTML = w.length ? '' : '<div class="empty">誰も出勤していません</div>';
-  $('done').innerHTML = d.length ? '' : '<div class="empty">まだありません</div>';
-
-  for (const r of w) $('working').appendChild(card(r));
-  for (const r of d) $('done').appendChild(card(r));
-}
-
-function card(r) {
-  const el = document.createElement('div');
-  el.className = 'row';
-  const tag = r.staff_id ? '' : '<span class="tag">未登録</span>';
-  const t = r.clock_out_at
-    ? hm(r.clock_in_at) + ' → ' + hm(r.clock_out_at)
-    : hm(r.clock_in_at);
-  const sub = r.clock_out_at
-    ? '<div class="dur">勤務時間 ' + dur(r.clock_in_at, r.clock_out_at) + '</div>'
-    : '';
-  el.innerHTML = '<div class="top"><span class="nm">' + esc(r.staff_name) + tag +
-    '</span><span class="tm">' + t + '</span></div>' + sub +
-    '<div class="pics hide"></div>';
-
-  el.onclick = async () => {
-    const box = el.querySelector('.pics');
-    if (open.has(r.id)) { open.delete(r.id); box.classList.add('hide'); return; }
-    open.add(r.id);
-    box.classList.remove('hide');
-    box.innerHTML = '<div class="empty">読み込み中...</div>';
-    const [a, b] = await Promise.all([pic(r.clock_in_photo_path), pic(r.clock_out_photo_path)]);
-    box.innerHTML =
-      '<div><span>出勤時</span>' + (a ? '<img src="' + a + '">' : '<div class="empty">なし</div>') + '</div>' +
-      '<div><span>退勤時</span>' + (b ? '<img src="' + b + '">' : '<div class="empty">なし</div>') + '</div>';
-  };
-
-  if (open.has(r.id)) el.click();
-  return el;
-}
-
-function esc(s) {
-  return String(s).replace(/[&<>"]/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-}
-
-sb.auth.getSession().then(({ data }) => { if (data.session) start(); });
 </script></body></html>
