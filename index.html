@@ -10,20 +10,23 @@ body{margin:0;background:#0b0b0d;color:#f2ece1;min-height:100dvh;display:flex;
 flex-direction:column;justify-content:center;padding:24px;
 font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
 .wrap{max-width:460px;margin:0 auto;width:100%}
-h1{font-size:14px;letter-spacing:.22em;color:#8a8578;font-weight:500;text-align:center;margin:0 0 30px}
-label{display:block;font-size:15px;color:#a9a396;margin-bottom:10px}
+h1{font-size:14px;letter-spacing:.22em;color:#8a8578;font-weight:500;text-align:center;margin:0 0 26px}
+label{display:block;font-size:15px;color:#a9a396;margin-bottom:12px;text-align:center}
 input[type=text]{width:100%;font-size:24px;padding:18px;border-radius:14px;
-border:1px solid #2a2a2e;background:#151518;color:#fff}
+border:1px solid #2a2a2e;background:#151518;color:#fff;margin-bottom:4px}
 input[type=text]:focus{outline:none;border-color:#d4a556}
 button{width:100%;font-size:22px;font-weight:700;padding:24px;border:none;
-border-radius:16px;margin-top:16px;color:#0b0b0d;background:#d4a556}
-button.sub{background:#1e1e22;color:#e6e0d4;border:1px solid #33333a;font-size:16px;padding:15px}
+border-radius:16px;margin-top:14px;color:#0b0b0d;background:#d4a556}
+button.name{background:#17171b;color:#f2ece1;border:1px solid #33333a;
+font-size:21px;padding:22px;margin-top:11px}
+button.sub{background:#1e1e22;color:#c9c3b7;border:1px solid #33333a;font-size:15px;padding:14px}
 button:disabled{opacity:.35}
 .frame{margin-top:18px;width:100%;aspect-ratio:3/4;border-radius:16px;
 border:1px dashed #3a3a42;background:#151518;display:flex;align-items:center;
 justify-content:center;color:#6d6862;font-size:15px;overflow:hidden}
 .frame img{width:100%;height:100%;object-fit:cover}
 .msg{text-align:center;font-size:17px;line-height:1.75;margin:0}
+.who{text-align:center;font-size:23px;font-weight:600;margin-bottom:14px}
 .big{font-size:32px;font-weight:700;color:#d4a556}
 .warn{background:#2a1d14;border:1px solid #6b4a26;border-radius:12px;padding:14px;
 font-size:14px;color:#e2c9a4;margin-bottom:18px;line-height:1.6}
@@ -33,21 +36,30 @@ font-size:14px;color:#e2c9a4;margin-bottom:18px;line-height:1.6}
 <body><div class="wrap">
 <h1 id="store">出退勤</h1>
 
-<div id="v-name">
+<div id="v-pick">
+<label>名前を選んでください</label>
+<div id="names"></div>
+<button id="other" class="sub">名前を入力する</button>
+<div class="err" id="e0"></div>
+</div>
+
+<div id="v-name" class="hide">
 <label>お名前</label>
 <input type="text" id="nm" autocomplete="off" placeholder="例：山田花子">
 <button id="go">次へ</button>
+<button id="toPick" class="sub">一覧から選ぶ</button>
 <div class="err" id="e1"></div>
 </div>
 
 <div id="v-act" class="hide">
 <div id="warn" class="warn hide"></div>
+<div class="who" id="who"></div>
 <p class="msg" id="stat"></p>
 <div class="frame" id="frame">タップして撮影</div>
 <input type="file" accept="image/*" capture="user" id="cam" class="hide">
 <button id="shoot" class="sub">写真を撮る</button>
 <button id="act" disabled>出勤する</button>
-<button id="back" class="sub">名前を入れ直す</button>
+<button id="back" class="sub">戻る</button>
 <div class="err" id="e2"></div>
 </div>
 
@@ -57,27 +69,46 @@ font-size:14px;color:#e2c9a4;margin-bottom:18px;line-height:1.6}
 </div>
 </div>
 <script>
-var API='https://xloffcmacznuhllhendx.supabase.co/functions/v1/kintai';
+var BASE='https://xloffcmacznuhllhendx.supabase.co/functions/v1/';
 var token=new URLSearchParams(location.search).get('t')||'';
-var photo=null,mode='in';
+var photo=null,mode='in',name='';
 function $(i){return document.getElementById(i)}
-function show(v){['v-name','v-act','v-done'].forEach(function(x){
+function show(v){['v-pick','v-name','v-act','v-done'].forEach(function(x){
   $(x).classList.toggle('hide',x!==v)})}
-function post(b){return fetch(API,{method:'POST',
+function post(fn,b){b.token=token;return fetch(BASE+fn,{method:'POST',
   headers:{'content-type':'application/json'},body:JSON.stringify(b)})
   .then(function(r){return r.json()})}
 
+post('names',{}).then(function(d){
+  if(d.store_name)$('store').textContent=d.store_name;
+  if(d.error){$('e0').textContent='QRコードが正しくありません';return}
+  if(!d.names||!d.names.length){show('v-name');return}
+  var box=$('names');box.innerHTML='';
+  d.names.forEach(function(n){
+    var b=document.createElement('button');
+    b.className='name';b.textContent=n;
+    b.onclick=function(){name=n;checkState()};
+    box.appendChild(b);
+  });
+}).catch(function(){$('e0').textContent='通信に失敗しました'});
+
+$('other').onclick=function(){$('nm').value='';show('v-name')};
+$('toPick').onclick=function(){show('v-pick')};
 $('go').onclick=function(){
   var n=$('nm').value.trim();
   if(!n){$('e1').textContent='名前を入力してください';return}
-  $('go').disabled=true;$('e1').textContent='';
-  post({action:'state',token:token,name:n}).then(function(d){
-    $('go').disabled=false;
-    if(d.error){$('e1').textContent=(d.error==='invalid_token')
-      ?'QRコードが正しくありません':'エラーが発生しました';return}
+  name=n;checkState();
+};
+
+function checkState(){
+  $('e0').textContent='';$('e1').textContent='';
+  post('kintai',{action:'state',name:name}).then(function(d){
+    if(d.error){$('e0').textContent=$('e1').textContent=
+      (d.error==='invalid_token')?'QRコードが正しくありません':'エラーが発生しました';return}
     if(d.store_name)$('store').textContent=d.store_name;
     photo=null;$('frame').textContent='タップして撮影';
     $('act').disabled=true;$('e2').textContent='';
+    $('who').textContent=name;
     $('warn').classList.add('hide');
     if(d.missing_out){$('warn').classList.remove('hide');
       $('warn').textContent=d.missing_out.date+'（'+d.missing_out.clock_in
@@ -97,9 +128,8 @@ $('go').onclick=function(){
       $('shoot').classList.add('hide');
       $('act').classList.add('hide')}
     show('v-act');
-  }).catch(function(){$('go').disabled=false;
-    $('e1').textContent='通信に失敗しました'});
-};
+  }).catch(function(){$('e0').textContent=$('e1').textContent='通信に失敗しました'});
+}
 
 $('shoot').onclick=function(){$('cam').click()};
 $('frame').onclick=function(){$('cam').click()};
@@ -124,8 +154,7 @@ $('act').onclick=function(){
   if(!photo){$('e2').textContent='写真を撮ってください';return}
   var lbl=(mode==='in')?'出勤する':'退勤する';
   $('act').disabled=true;$('act').textContent='送信中...';$('e2').textContent='';
-  post({action:mode,token:token,name:$('nm').value.trim(),photo:photo})
-  .then(function(d){
+  post('kintai',{action:mode,name:name,photo:photo}).then(function(d){
     if(d.error){
       $('act').disabled=false;$('act').textContent=lbl;
       var m={already_working:'すでに出勤中です',
@@ -146,6 +175,6 @@ $('act').onclick=function(){
     $('e2').textContent='通信に失敗しました'});
 };
 
-$('back').onclick=function(){show('v-name')};
-$('again').onclick=function(){$('nm').value='';photo=null;show('v-name')};
+$('back').onclick=function(){show('v-pick')};
+$('again').onclick=function(){name='';photo=null;location.reload()};
 </script></body></html>
