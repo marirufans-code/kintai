@@ -2,47 +2,57 @@
 <html lang="ja"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0b0d">
+<meta name="theme-color" content="#0d0b09">
 <title>スタッフ管理</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#0b0b0d;color:#f2ece1;min-height:100dvh;padding:20px;
-font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
-.wrap{max-width:640px;margin:0 auto}
-h1{font-size:15px;letter-spacing:.2em;color:#8a8578;font-weight:500;text-align:center;margin:8px 0 20px}
-h2{font-size:13px;letter-spacing:.14em;color:#d4a556;font-weight:600;margin:26px 0 12px;
-border-bottom:1px solid #26262b;padding-bottom:8px}
-label{display:block;font-size:13px;color:#a9a396;margin:12px 0 6px}
+body{margin:0;color:#f3efe8;min-height:100dvh;padding:20px;position:relative;
+font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+background:#0d0b09 url('./IMG_1119.jpeg') center/cover no-repeat fixed}
+body::before{content:'';position:fixed;inset:0;
+background:linear-gradient(180deg,rgba(8,7,6,.62) 0%,rgba(8,7,6,.5) 45%,rgba(8,7,6,.72) 100%)}
+.wrap{max-width:640px;margin:0 auto;position:relative;z-index:1}
+.logo{display:block;width:100%;max-width:190px;margin:6px auto 18px;
+filter:drop-shadow(0 3px 16px rgba(0,0,0,.95))}
+h2{font-size:13px;letter-spacing:.14em;color:#c9a961;font-weight:600;margin:26px 0 12px;
+border-bottom:1px solid rgba(210,190,150,.24);padding-bottom:8px;
+text-shadow:0 2px 10px rgba(0,0,0,1)}
+label{display:block;font-size:13px;color:#d6cec2;margin:12px 0 6px;
+text-shadow:0 2px 10px rgba(0,0,0,1)}
 input{width:100%;font-size:16px;padding:13px;border-radius:11px;
-border:1px solid #2a2a2e;background:#151518;color:#fff}
-input:focus{outline:none;border-color:#d4a556}
+border:1px solid rgba(210,190,150,.32);background:rgba(12,11,10,.75);color:#fff;
+backdrop-filter:blur(10px)}
+input:focus{outline:none;border-color:#c9a961}
 .f2{display:flex;gap:10px}.f2>div{flex:1}
 button{font-size:16px;font-weight:700;padding:15px;border:none;border-radius:12px;
-margin-top:14px;color:#0b0b0d;background:#d4a556;width:100%}
-button.sub{background:#1e1e22;color:#c9c3b7;border:1px solid #33333a;
-font-size:12px;padding:8px 12px;width:auto;margin:0}
-button.dng{background:#2a1416;color:#e08a80;border:1px solid #5c2a2a}
-.nav{display:flex;gap:8px;justify-content:center;margin-bottom:6px;flex-wrap:wrap}
-.nav a{font-size:13px;color:#c9c3b7;background:#1e1e22;border:1px solid #33333a;
-border-radius:9px;padding:9px 14px;text-decoration:none}
-.nav a.on{background:#d4a556;color:#0b0b0d;border-color:#d4a556}
-.row{background:#141417;border:1px solid #26262b;border-radius:12px;
-padding:14px 15px;margin-bottom:8px}
+margin-top:14px;color:#17120a;background:#c9a961;width:100%;
+box-shadow:0 6px 22px rgba(0,0,0,.6)}
+button.sub{background:rgba(14,13,11,.78);color:#cdc4b6;
+border:1px solid rgba(210,190,150,.28);font-size:12px;padding:8px 12px;width:auto;
+margin:0;box-shadow:none;backdrop-filter:blur(10px)}
+button.dng{background:rgba(40,16,14,.85);color:#f08a80;border:1px solid #6b2f2a}
+.nav{display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.nav a{font-size:13px;color:#cdc4b6;background:rgba(14,13,11,.78);
+border:1px solid rgba(210,190,150,.28);border-radius:9px;padding:9px 14px;
+text-decoration:none;backdrop-filter:blur(10px)}
+.nav a.on{background:#c9a961;color:#17120a;border-color:#c9a961}
+.row{background:rgba(13,12,11,.78);border:1px solid rgba(210,190,150,.2);
+border-radius:12px;padding:14px 15px;margin-bottom:8px;backdrop-filter:blur(10px)}
 .row .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .nm{font-size:17px;font-weight:600}
-.wg{font-size:15px;color:#d4a556;font-variant-numeric:tabular-nums}
-.meta{font-size:12px;color:#7d786f;margin-top:5px}
-.acts{display:flex;gap:7px;margin-top:11px}
-.retired{opacity:.5}
-.empty{color:#5e5a53;font-size:14px;padding:8px 2px}
-.err{color:#f0806f;font-size:14px;margin-top:12px;text-align:center}
-.ok{color:#7fbf7f;font-size:13px;margin-top:10px;text-align:center}
+.wg{font-size:15px;color:#e0c07a;font-variant-numeric:tabular-nums}
+.meta{font-size:12px;color:#a89e90;margin-top:5px}
+.acts{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.retired{opacity:.45}
+.empty{color:#8a8276;font-size:14px;padding:8px 2px}
+.err{color:#ffa294;font-size:14px;margin-top:12px;text-align:center}
+.ok{color:#8fe0b0;font-size:13px;margin-top:10px;text-align:center}
 .hide{display:none}
 </style></head>
 <body><div class="wrap">
 
 <div id="v-login">
-<h1>スタッフ管理</h1>
+<img class="logo" src="./IMG_1043.jpeg" alt="">
 <label>メールアドレス</label>
 <input type="email" id="em" autocapitalize="none" spellcheck="false">
 <label>パスワード</label>
@@ -52,7 +62,7 @@ padding:14px 15px;margin-bottom:8px}
 </div>
 
 <div id="v-main" class="hide">
-<h1 id="store">スタッフ管理</h1>
+<img class="logo" src="./IMG_1043.jpeg" alt="">
 <div class="nav">
 <a href="./admin.html">本日</a>
 <a href="./history.html">履歴</a>
@@ -102,8 +112,8 @@ $('login').onclick = async () => {
 async function start() {
   $('v-login').classList.add('hide');
   $('v-main').classList.remove('hide');
-  const { data: s } = await sb.from('stores').select('id,name').limit(1).maybeSingle();
-  if (s) { storeId = s.id; $('store').textContent = s.name; }
+  const { data: s } = await sb.from('stores').select('id').limit(1).maybeSingle();
+  if (s) storeId = s.id;
   await load();
 }
 
@@ -119,8 +129,7 @@ $('add').onclick = async () => {
   $('add').disabled = false;
 
   if (error) {
-    $('e2').textContent = error.code === '23505'
-      ? 'その名前は登録済みです' : error.message;
+    $('e2').textContent = error.code === '23505' ? 'その名前は登録済みです' : error.message;
     return;
   }
   $('nm').value = ''; $('wg').value = '';
@@ -129,13 +138,11 @@ $('add').onclick = async () => {
   await link();
 };
 
-// 登録済みの名前と過去の打刻を紐付ける
 async function link() {
   const { data: st } = await sb.from('staff').select('id,name_key');
   if (!st) return;
   for (const s of st) {
-    await sb.from('attendances')
-      .update({ staff_id: s.id })
+    await sb.from('attendances').update({ staff_id: s.id })
       .eq('name_key', s.name_key).is('staff_id', null);
   }
 }
@@ -158,8 +165,8 @@ function card(s, isRetired) {
   const el = document.createElement('div');
   el.className = 'row' + (isRetired ? ' retired' : '');
   const w = s.hourly_wage ? s.hourly_wage.toLocaleString('ja-JP') + ' 円' : '未設定';
-  const d = new Date(s.created_at);
-  const ymd = new Intl.DateTimeFormat('ja-JP', { timeZone: 'Asia/Tokyo' }).format(d);
+  const ymd = new Intl.DateTimeFormat('ja-JP', { timeZone: 'Asia/Tokyo' })
+    .format(new Date(s.created_at));
 
   el.innerHTML = '<div class="top"><span class="nm">' + esc(s.name) + '</span>' +
     '<span class="wg">' + w + '</span></div>' +
@@ -182,8 +189,7 @@ function card(s, isRetired) {
   bs.className = 'sub';
   bs.textContent = isRetired ? '在籍に戻す' : '退職にする';
   bs.onclick = async () => {
-    await sb.from('staff')
-      .update({ status: isRetired ? 'active' : 'retired' }).eq('id', s.id);
+    await sb.from('staff').update({ status: isRetired ? 'active' : 'retired' }).eq('id', s.id);
     load();
   };
   acts.appendChild(bs);
