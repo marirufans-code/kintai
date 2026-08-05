@@ -2,37 +2,62 @@
 <html lang="ja"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d0b09">
 <title>店舗QRコード</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;padding:28px 24px;background:#fff;color:#111;
-font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
-.sheet{max-width:420px;margin:0 auto;text-align:center;
-border:2px solid #111;border-radius:18px;padding:32px 24px}
-h1{font-size:22px;margin:0 0 4px;letter-spacing:.08em}
-.sub{font-size:14px;color:#666;margin-bottom:26px}
-#qr{display:flex;justify-content:center;margin-bottom:24px}
-#qr canvas,#qr img{width:100%;max-width:300px;height:auto}
+body{margin:0;padding:24px 20px;color:#f3efe8;min-height:100dvh;position:relative;
+font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+background:#0d0b09 url('./IMG_1119.jpeg') center/cover no-repeat fixed}
+body::before{content:'';position:fixed;inset:0;
+background:linear-gradient(180deg,rgba(8,7,6,.66) 0%,rgba(8,7,6,.54) 45%,rgba(8,7,6,.74) 100%)}
+.page{max-width:640px;margin:0 auto;position:relative;z-index:1}
+.nav{display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.nav a{font-size:13px;color:#cdc4b6;background:rgba(14,13,11,.78);
+border:1px solid rgba(210,190,150,.28);border-radius:9px;padding:9px 14px;
+text-decoration:none;backdrop-filter:blur(10px)}
+.nav a.on{background:#c9a961;color:#17120a;border-color:#c9a961}
+
+.sheet{max-width:420px;margin:0 auto;text-align:center;background:#fff;color:#111;
+border-radius:16px;padding:34px 26px;box-shadow:0 14px 44px rgba(0,0,0,.7)}
+.sheet .logo{display:block;width:100%;max-width:210px;margin:0 auto 6px}
+.sub{font-size:14px;color:#666;margin-bottom:24px;letter-spacing:.04em}
+#qr{display:flex;justify-content:center;margin-bottom:22px}
+#qr canvas,#qr img{width:100%;max-width:290px;height:auto}
 .steps{text-align:left;font-size:15px;line-height:2;margin:0 auto;display:inline-block}
 .steps b{display:inline-block;width:26px;height:26px;line-height:26px;
 text-align:center;background:#111;color:#fff;border-radius:50%;
-font-size:13px;margin-right:9px}
-.note{font-size:12px;color:#888;margin-top:22px;line-height:1.7}
-.tools{max-width:420px;margin:22px auto 0;text-align:center}
-button{font-size:15px;padding:13px 20px;border:1px solid #111;background:#fff;
-border-radius:10px;margin:5px 4px;cursor:pointer}
-.url{font-size:11px;color:#999;word-break:break-all;margin-top:14px}
-@media print{.tools{display:none}body{padding:0}.sheet{border:none}}
+font-size:13px;margin-right:9px;font-weight:600}
+.note{font-size:12px;color:#888;margin-top:20px;line-height:1.7}
+
+.tools{max-width:420px;margin:20px auto 0;text-align:center}
+.tools button{font-size:15px;padding:14px 20px;border:1px solid rgba(210,190,150,.3);
+background:rgba(14,13,11,.8);color:#e6dcc8;border-radius:11px;width:100%;
+backdrop-filter:blur(10px)}
+.url{font-size:11px;color:#a89e90;word-break:break-all;margin-top:14px}
+@media print{
+  body{background:#fff;padding:0}
+  body::before{display:none}
+  .nav,.tools{display:none}
+  .sheet{box-shadow:none;border-radius:0;max-width:none;padding:40px}
+}
 </style></head>
-<body>
+<body><div class="page">
+
+<div class="nav">
+<a href="./admin.html">本日</a>
+<a href="./history.html">履歴</a>
+<a href="./staff.html">スタッフ</a>
+<a href="./qr.html" class="on">QR</a>
+</div>
 
 <div class="sheet">
-<h1 id="store">G2 - Bar</h1>
+<img class="logo" src="./IMG_1043.jpeg" alt="G2 - Bar">
 <div class="sub">出勤・退勤の打刻はこちら</div>
 <div id="qr">読み込み中...</div>
 <div class="steps">
 <div><b>1</b>カメラでQRを読み取る</div>
-<div><b>2</b>名前を入力する</div>
+<div><b>2</b>名前を選ぶ</div>
 <div><b>3</b>写真を撮る</div>
 <div><b>4</b>出勤 / 退勤を押す</div>
 </div>
@@ -44,6 +69,7 @@ border-radius:10px;margin:5px 4px;cursor:pointer}
 <div class="url" id="url"></div>
 </div>
 
+</div>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <script>
 var TOKEN = '9e3bf6a0913fdee94e370c1b1d878b6d';
@@ -51,7 +77,7 @@ var URL_ = 'https://marirufans-code.github.io/kintai/?t=' + TOKEN;
 document.getElementById('url').textContent = URL_;
 document.getElementById('qr').innerHTML = '';
 new QRCode(document.getElementById('qr'), {
-  text: URL_, width: 300, height: 300,
+  text: URL_, width: 290, height: 290,
   correctLevel: QRCode.CorrectLevel.M
 });
 </script>
