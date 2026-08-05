@@ -2,48 +2,50 @@
 <html lang="ja"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0b0d">
+<meta name="theme-color" content="#0a0c0d">
 <title>勤務履歴</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#0b0b0d;color:#f2ece1;min-height:100dvh;padding:20px;
+body{margin:0;background:#0a0c0d;color:#e9eceb;min-height:100dvh;padding:20px;
 font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
 .wrap{max-width:640px;margin:0 auto}
-h1{font-size:15px;letter-spacing:.2em;color:#8a8578;font-weight:500;text-align:center;margin:8px 0 20px}
-h2{font-size:13px;letter-spacing:.14em;color:#d4a556;font-weight:600;margin:26px 0 12px;
-border-bottom:1px solid #26262b;padding-bottom:8px}
-label{display:block;font-size:13px;color:#a9a396;margin:12px 0 6px}
+h1{font-size:15px;letter-spacing:.2em;color:#8a8f8c;font-weight:500;text-align:center;margin:8px 0 20px}
+h2{font-size:13px;letter-spacing:.14em;color:#e0b13f;font-weight:600;margin:26px 0 12px;
+border-bottom:1px solid #262b29;padding-bottom:8px}
+label{display:block;font-size:13px;color:#9ba39f;margin:12px 0 6px}
 input,select{width:100%;font-size:16px;padding:13px;border-radius:11px;
-border:1px solid #2a2a2e;background:#151518;color:#fff}
-input:focus,select:focus{outline:none;border-color:#d4a556}
+border:1px solid #262b29;background:#131615;color:#fff}
+input:focus,select:focus{outline:none;border-color:#e0b13f}
 .f2{display:flex;gap:10px}.f2>div{flex:1}
 button{font-size:16px;font-weight:700;padding:15px;border:none;border-radius:12px;
-margin-top:14px;color:#0b0b0d;background:#d4a556;width:100%}
-button.sub{background:#1e1e22;color:#c9c3b7;border:1px solid #33333a;
-font-size:13px;padding:9px 14px;width:auto;margin:0}
-.nav{display:flex;gap:8px;justify-content:center;margin-bottom:6px}
-.nav a{font-size:13px;color:#c9c3b7;background:#1e1e22;border:1px solid #33333a;
+margin-top:14px;color:#1a1204;background:#e0b13f;width:100%}
+button.sub{background:#161a19;color:#a6afab;border:1px solid #2c322f;
+font-size:12px;padding:9px 13px;width:auto;margin:0}
+button.dng{background:#1e100e;color:#d05a4e;border:1px solid #4c2320}
+.nav{display:flex;gap:8px;justify-content:center;margin-bottom:6px;flex-wrap:wrap}
+.nav a{font-size:13px;color:#a6afab;background:#161a19;border:1px solid #2c322f;
 border-radius:9px;padding:9px 14px;text-decoration:none}
-.nav a.on{background:#d4a556;color:#0b0b0d;border-color:#d4a556}
-.row{background:#141417;border:1px solid #26262b;border-radius:12px;
+.nav a.on{background:#e0b13f;color:#1a1204;border-color:#e0b13f}
+.row{background:#131615;border:1px solid #262b29;border-radius:12px;
 padding:14px 15px;margin-bottom:8px}
 .row .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .nm{font-size:17px;font-weight:600}
-.tm{font-size:16px;color:#d4a556;font-variant-numeric:tabular-nums}
-.meta{font-size:12px;color:#7d786f;margin-top:5px}
-.dt{font-size:12px;color:#8a8578;margin-bottom:3px}
+.tm{font-size:16px;color:#e0b13f;font-variant-numeric:tabular-nums}
+.meta{font-size:12px;color:#7b8380;margin-top:5px}
+.dt{font-size:12px;color:#8a8f8c;margin-bottom:3px}
 .pics{display:flex;gap:9px;margin-top:11px}
 .pics div{flex:1}
-.pics span{font-size:11px;color:#7d786f;display:block;margin-bottom:5px}
-.pics img{width:100%;border-radius:9px;display:block;background:#1e1e22}
+.pics span{font-size:11px;color:#7b8380;display:block;margin-bottom:5px}
+.pics img{width:100%;border-radius:9px;display:block;background:#1c211f}
+.acts{display:flex;gap:7px;margin-top:11px}
 .sum{display:flex;justify-content:space-between;padding:13px 15px;
-background:#141417;border:1px solid #26262b;border-radius:12px;margin-bottom:8px}
+background:#131615;border:1px solid #262b29;border-radius:12px;margin-bottom:8px}
 .sum .h{font-size:16px;font-weight:600}
 .sum .v{text-align:right}
-.sum .v b{font-size:17px;color:#d4a556;font-variant-numeric:tabular-nums}
-.sum .v small{display:block;font-size:11px;color:#7d786f;margin-top:3px}
-.empty{color:#5e5a53;font-size:14px;padding:8px 2px}
-.err{color:#f0806f;font-size:14px;margin-top:12px;text-align:center}
+.sum .v b{font-size:17px;color:#e0b13f;font-variant-numeric:tabular-nums}
+.sum .v small{display:block;font-size:11px;color:#7b8380;margin-top:3px}
+.empty{color:#5f6764;font-size:14px;padding:8px 2px}
+.err{color:#ef8272;font-size:14px;margin-top:12px;text-align:center}
 .hide{display:none}
 </style></head>
 <body><div class="wrap">
@@ -63,6 +65,7 @@ background:#141417;border:1px solid #26262b;border-radius:12px;margin-bottom:8px
 <div class="nav">
 <a href="./admin.html">本日</a>
 <a href="./history.html" class="on">履歴</a>
+<a href="./staff.html">スタッフ</a>
 <a href="./qr.html">QR</a>
 </div>
 
@@ -78,7 +81,7 @@ background:#141417;border:1px solid #26262b;border-radius:12px;margin-bottom:8px
 <h2>集計</h2>
 <div id="summary"></div>
 
-<h2>明細 <span id="cnt" style="color:#5e5a53;font-size:11px"></span></h2>
+<h2>明細 <span id="cnt" style="color:#5f6764;font-size:11px"></span></h2>
 <div id="list"></div>
 </div>
 
@@ -103,10 +106,7 @@ function hm(ts) {
 function secs(a, b) { return Math.floor((new Date(b) - new Date(a)) / 1000); }
 function hhmm(s) { return Math.floor(s / 3600) + '時間' + Math.floor((s % 3600) / 60) + '分'; }
 function yen(n) { return '¥' + Math.round(n).toLocaleString('ja-JP'); }
-function md(d) {
-  const [y, m, dd] = d.split('-');
-  return Number(m) + '/' + Number(dd);
-}
+function md(d) { const p = d.split('-'); return Number(p[1]) + '/' + Number(p[2]); }
 
 $('login').onclick = async () => {
   $('e1').textContent = '';
@@ -129,10 +129,9 @@ async function start() {
   const { data: st } = await sb.from('staff').select('name_key,hourly_wage');
   if (st) for (const r of st) wages[r.name_key] = r.hourly_wage;
 
-  const now = new Date();
-  const j = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(now);
-  const [y, m] = j.split('-');
-  $('from').value = y + '-' + m + '-01';
+  const j = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date());
+  const p = j.split('-');
+  $('from').value = p[0] + '-' + p[1] + '-01';
   $('to').value = j;
   await run();
 }
@@ -170,11 +169,11 @@ async function run() {
     const a = agg[k];
     const w = wages[k];
     const pay = w ? '<small>' + yen(a.sec / 3600 * w) + '（時給' + w + '円）</small>' : '';
-    const warn = a.openCount ? '<small style="color:#c98b6b">未退勤 ' + a.openCount + '件</small>' : '';
+    const warn = a.openCount ? '<small style="color:#d05a4e">未退勤 ' + a.openCount + '件</small>' : '';
     const el = document.createElement('div');
     el.className = 'sum';
     el.innerHTML = '<div><div class="h">' + esc(a.name) + '</div>' +
-      '<small style="color:#7d786f">' + a.days + '日</small></div>' +
+      '<small style="color:#7b8380">' + a.days + '日</small></div>' +
       '<div class="v"><b>' + hhmm(a.sec) + '</b>' + pay + warn + '</div>';
     $('summary').appendChild(el);
   }
@@ -198,20 +197,51 @@ function card(r) {
     : hm(r.clock_in_at) + ' → —';
   const d = r.clock_out_at
     ? hhmm(secs(r.clock_in_at, r.clock_out_at))
-    : '<span style="color:#c98b6b">退勤記録なし</span>';
+    : '<span style="color:#d05a4e">退勤記録なし</span>';
+
   el.innerHTML = '<div class="dt">' + md(r.business_date) + '</div>' +
     '<div class="top"><span class="nm">' + esc(r.staff_name) + '</span>' +
     '<span class="tm">' + t + '</span></div>' +
-    '<div class="meta">' + d + '</div><div class="pics hide"></div>';
+    '<div class="meta">' + d + '</div>' +
+    '<div class="pics hide"></div>' +
+    '<div class="acts hide"></div>';
+
+  const pics = el.querySelector('.pics');
+  const acts = el.querySelector('.acts');
+
+  const del = document.createElement('button');
+  del.className = 'sub dng';
+  del.textContent = 'この記録を削除';
+  del.onclick = async (ev) => {
+    ev.stopPropagation();
+    const label = r.staff_name + '　' + md(r.business_date) + '　' + t;
+    if (!confirm('この記録を完全に削除します。元に戻せません。\n\n' + label)) return;
+    del.disabled = true;
+    del.textContent = '削除中...';
+
+    const paths = [r.clock_in_photo_path, r.clock_out_photo_path].filter(Boolean);
+    if (paths.length) await sb.storage.from('attendance-photos').remove(paths);
+
+    const { error } = await sb.from('attendances').delete().eq('id', r.id);
+    if (error) { del.disabled = false; del.textContent = '削除失敗: ' + error.message; return; }
+    el.remove();
+    run();
+  };
+  acts.appendChild(del);
 
   el.onclick = async () => {
-    const box = el.querySelector('.pics');
-    if (open.has(r.id)) { open.delete(r.id); box.classList.add('hide'); return; }
+    if (open.has(r.id)) {
+      open.delete(r.id);
+      pics.classList.add('hide');
+      acts.classList.add('hide');
+      return;
+    }
     open.add(r.id);
-    box.classList.remove('hide');
-    box.innerHTML = '<div class="empty">読み込み中...</div>';
+    pics.classList.remove('hide');
+    acts.classList.remove('hide');
+    pics.innerHTML = '<div class="empty">読み込み中...</div>';
     const [a, b] = await Promise.all([pic(r.clock_in_photo_path), pic(r.clock_out_photo_path)]);
-    box.innerHTML =
+    pics.innerHTML =
       '<div><span>出勤時</span>' + (a ? '<img src="' + a + '">' : '<div class="empty">なし</div>') + '</div>' +
       '<div><span>退勤時</span>' + (b ? '<img src="' + b + '">' : '<div class="empty">なし</div>') + '</div>';
   };
