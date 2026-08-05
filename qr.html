@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>店舗QRコード</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:28px 24px;background:#fff;color:#111;
+font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
+.sheet{max-width:420px;margin:0 auto;text-align:center;
+border:2px solid #111;border-radius:18px;padding:32px 24px}
+h1{font-size:22px;margin:0 0 4px;letter-spacing:.08em}
+.sub{font-size:14px;color:#666;margin-bottom:26px}
+#qr{display:flex;justify-content:center;margin-bottom:24px}
+#qr canvas,#qr img{width:100%;max-width:300px;height:auto}
+.steps{text-align:left;font-size:15px;line-height:2;margin:0 auto;display:inline-block}
+.steps b{display:inline-block;width:26px;height:26px;line-height:26px;
+text-align:center;background:#111;color:#fff;border-radius:50%;
+font-size:13px;margin-right:9px}
+.note{font-size:12px;color:#888;margin-top:22px;line-height:1.7}
+.tools{max-width:420px;margin:22px auto 0;text-align:center}
+button{font-size:15px;padding:13px 20px;border:1px solid #111;background:#fff;
+border-radius:10px;margin:5px 4px;cursor:pointer}
+.url{font-size:11px;color:#999;word-break:break-all;margin-top:14px}
+@media print{.tools{display:none}body{padding:0}.sheet{border:none}}
+</style></head>
+<body>
+
+<div class="sheet">
+<h1 id="store">G2 - Bar</h1>
+<div class="sub">出勤・退勤の打刻はこちら</div>
+<div id="qr">読み込み中...</div>
+<div class="steps">
+<div><b>1</b>カメラでQRを読み取る</div>
+<div><b>2</b>名前を入力する</div>
+<div><b>3</b>写真を撮る</div>
+<div><b>4</b>出勤 / 退勤を押す</div>
+</div>
+<div class="note">退勤も同じQRコードを読み取ってください</div>
+</div>
+
+<div class="tools">
+<button onclick="window.print()">印刷 / PDF保存</button>
+<div class="url" id="url"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+var TOKEN = '9e3bf6a0913fdee94e370c1b1d878b6d';
+var URL_ = 'https://marirufans-code.github.io/kintai/?t=' + TOKEN;
+document.getElementById('url').textContent = URL_;
+document.getElementById('qr').innerHTML = '';
+new QRCode(document.getElementById('qr'), {
+  text: URL_, width: 300, height: 300,
+  correctLevel: QRCode.CorrectLevel.M
+});
+</script>
+</body></html>
