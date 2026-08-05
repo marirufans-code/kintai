@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0d">
+<title>スタッフ管理</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#0b0b0d;color:#f2ece1;min-height:100dvh;padding:20px;
+font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
+.wrap{max-width:640px;margin:0 auto}
+h1{font-size:15px;letter-spacing:.2em;color:#8a8578;font-weight:500;text-align:center;margin:8px 0 20px}
+h2{font-size:13px;letter-spacing:.14em;color:#d4a556;font-weight:600;margin:26px 0 12px;
+border-bottom:1px solid #26262b;padding-bottom:8px}
+label{display:block;font-size:13px;color:#a9a396;margin:12px 0 6px}
+input{width:100%;font-size:16px;padding:13px;border-radius:11px;
+border:1px solid #2a2a2e;background:#151518;color:#fff}
+input:focus{outline:none;border-color:#d4a556}
+.f2{display:flex;gap:10px}.f2>div{flex:1}
+button{font-size:16px;font-weight:700;padding:15px;border:none;border-radius:12px;
+margin-top:14px;color:#0b0b0d;background:#d4a556;width:100%}
+button.sub{background:#1e1e22;color:#c9c3b7;border:1px solid #33333a;
+font-size:12px;padding:8px 12px;width:auto;margin:0}
+button.dng{background:#2a1416;color:#e08a80;border:1px solid #5c2a2a}
+.nav{display:flex;gap:8px;justify-content:center;margin-bottom:6px;flex-wrap:wrap}
+.nav a{font-size:13px;color:#c9c3b7;background:#1e1e22;border:1px solid #33333a;
+border-radius:9px;padding:9px 14px;text-decoration:none}
+.nav a.on{background:#d4a556;color:#0b0b0d;border-color:#d4a556}
+.row{background:#141417;border:1px solid #26262b;border-radius:12px;
+padding:14px 15px;margin-bottom:8px}
+.row .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.nm{font-size:17px;font-weight:600}
+.wg{font-size:15px;color:#d4a556;font-variant-numeric:tabular-nums}
+.meta{font-size:12px;color:#7d786f;margin-top:5px}
+.acts{display:flex;gap:7px;margin-top:11px}
+.retired{opacity:.5}
+.empty{color:#5e5a53;font-size:14px;padding:8px 2px}
+.err{color:#f0806f;font-size:14px;margin-top:12px;text-align:center}
+.ok{color:#7fbf7f;font-size:13px;margin-top:10px;text-align:center}
+.hide{display:none}
+</style></head>
+<body><div class="wrap">
+
+<div id="v-login">
+<h1>スタッフ管理</h1>
+<label>メールアドレス</label>
+<input type="email" id="em" autocapitalize="none" spellcheck="false">
+<label>パスワード</label>
+<input type="password" id="pw">
+<button id="login">ログイン</button>
+<div class="err" id="e1"></div>
+</div>
+
+<div id="v-main" class="hide">
+<h1 id="store">スタッフ管理</h1>
+<div class="nav">
+<a href="./admin.html">本日</a>
+<a href="./history.html">履歴</a>
+<a href="./staff.html" class="on">スタッフ</a>
+<a href="./qr.html">QR</a>
+</div>
+
+<h2>新規登録</h2>
+<div class="f2">
+<div><label>名前</label><input type="text" id="nm" autocapitalize="none"></div>
+<div><label>時給（円）</label><input type="number" id="wg" inputmode="numeric"></div>
+</div>
+<button id="add">登録する</button>
+<div class="err" id="e2"></div>
+<div class="ok" id="m2"></div>
+
+<h2>在籍スタッフ</h2>
+<div id="active"></div>
+
+<h2>退職</h2>
+<div id="retired"></div>
+</div>
+
+</div>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const sb = createClient(
+  'https://xloffcmacznuhllhendx.supabase.co',
+  'sb_publishable_ApQmKKzTizl3EbFPpcJ15w_685w7d-8'
+);
+
+const $ = (i) => document.getElementById(i);
+let storeId = null;
+
+$('login').onclick = async () => {
+  $('e1').textContent = '';
+  $('login').disabled = true;
+  const { error } = await sb.auth.signInWithPassword({
+    email: $('em').value.trim().toLowerCase(), password: $('pw').value
+  });
+  $('login').disabled = false;
+  if (error) { $('e1').textContent = error.message; return; }
+  start();
+};
+
+async function start() {
+  $('v-login').classList.add('hide');
+  $('v-main').classList.remove('hide');
+  const { data: s } = await sb.from('stores').select('id,name').limit(1).maybeSingle();
+  if (s) { storeId = s.id; $('store').textContent = s.name; }
+  await load();
+}
+
+$('add').onclick = async () => {
+  $('e2').textContent = ''; $('m2').textContent = '';
+  const name = $('nm').value.trim();
+  if (!name) { $('e2').textContent = '名前を入力してください'; return; }
+  const wage = $('wg').value ? Number($('wg').value) : null;
+
+  $('add').disabled = true;
+  const { error } = await sb.from('staff')
+    .insert({ store_id: storeId, name: name, name_key: '', hourly_wage: wage });
+  $('add').disabled = false;
+
+  if (error) {
+    $('e2').textContent = error.code === '23505'
+      ? 'その名前は登録済みです' : error.message;
+    return;
+  }
+  $('nm').value = ''; $('wg').value = '';
+  $('m2').textContent = name + ' を登録しました';
+  await load();
+  await link();
+};
+
+// 登録済みの名前と過去の打刻を紐付ける
+async function link() {
+  const { data: st } = await sb.from('staff').select('id,name_key');
+  if (!st) return;
+  for (const s of st) {
+    await sb.from('attendances')
+      .update({ staff_id: s.id })
+      .eq('name_key', s.name_key).is('staff_id', null);
+  }
+}
+
+async function load() {
+  const { data, error } = await sb.from('staff')
+    .select('*').order('created_at', { ascending: false });
+  if (error) { $('active').innerHTML = '<div class="err">' + error.message + '</div>'; return; }
+
+  const a = data.filter((r) => r.status === 'active');
+  const r = data.filter((r) => r.status !== 'active');
+
+  $('active').innerHTML = a.length ? '' : '<div class="empty">まだ登録がありません</div>';
+  $('retired').innerHTML = r.length ? '' : '<div class="empty">なし</div>';
+  for (const s of a) $('active').appendChild(card(s, false));
+  for (const s of r) $('retired').appendChild(card(s, true));
+}
+
+function card(s, isRetired) {
+  const el = document.createElement('div');
+  el.className = 'row' + (isRetired ? ' retired' : '');
+  const w = s.hourly_wage ? s.hourly_wage.toLocaleString('ja-JP') + ' 円' : '未設定';
+  const d = new Date(s.created_at);
+  const ymd = new Intl.DateTimeFormat('ja-JP', { timeZone: 'Asia/Tokyo' }).format(d);
+
+  el.innerHTML = '<div class="top"><span class="nm">' + esc(s.name) + '</span>' +
+    '<span class="wg">' + w + '</span></div>' +
+    '<div class="meta">登録 ' + ymd + '</div><div class="acts"></div>';
+
+  const acts = el.querySelector('.acts');
+
+  const bw = document.createElement('button');
+  bw.className = 'sub';
+  bw.textContent = '時給を変更';
+  bw.onclick = async () => {
+    const v = prompt(s.name + ' の時給（円）', s.hourly_wage ?? '');
+    if (v === null) return;
+    await sb.from('staff').update({ hourly_wage: v === '' ? null : Number(v) }).eq('id', s.id);
+    load();
+  };
+  acts.appendChild(bw);
+
+  const bs = document.createElement('button');
+  bs.className = 'sub';
+  bs.textContent = isRetired ? '在籍に戻す' : '退職にする';
+  bs.onclick = async () => {
+    await sb.from('staff')
+      .update({ status: isRetired ? 'active' : 'retired' }).eq('id', s.id);
+    load();
+  };
+  acts.appendChild(bs);
+
+  if (isRetired) {
+    const bd = document.createElement('button');
+    bd.className = 'sub dng';
+    bd.textContent = '削除';
+    bd.onclick = async () => {
+      if (!confirm(s.name + ' を削除しますか。勤務記録は残ります。')) return;
+      await sb.from('staff').delete().eq('id', s.id);
+      load();
+    };
+    acts.appendChild(bd);
+  }
+  return el;
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+sb.auth.getSession().then(({ data }) => { if (data.session) start(); });
+</script></body></html>
