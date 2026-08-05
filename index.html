@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0d">
+<title>出退勤</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#0b0b0d;color:#f2ece1;min-height:100dvh;display:flex;
+flex-direction:column;justify-content:center;padding:24px;
+font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
+.wrap{max-width:460px;margin:0 auto;width:100%}
+h1{font-size:14px;letter-spacing:.22em;color:#8a8578;font-weight:500;text-align:center;margin:0 0 30px}
+label{display:block;font-size:15px;color:#a9a396;margin-bottom:10px}
+input[type=text]{width:100%;font-size:24px;padding:18px;border-radius:14px;
+border:1px solid #2a2a2e;background:#151518;color:#fff}
+input[type=text]:focus{outline:none;border-color:#d4a556}
+button{width:100%;font-size:22px;font-weight:700;padding:24px;border:none;
+border-radius:16px;margin-top:16px;color:#0b0b0d;background:#d4a556}
+button.sub{background:#1e1e22;color:#e6e0d4;border:1px solid #33333a;font-size:16px;padding:15px}
+button:disabled{opacity:.35}
+.frame{margin-top:18px;width:100%;aspect-ratio:3/4;border-radius:16px;
+border:1px dashed #3a3a42;background:#151518;display:flex;align-items:center;
+justify-content:center;color:#6d6862;font-size:15px;overflow:hidden}
+.frame img{width:100%;height:100%;object-fit:cover}
+.msg{text-align:center;font-size:17px;line-height:1.75;margin:0}
+.big{font-size:32px;font-weight:700;color:#d4a556}
+.warn{background:#2a1d14;border:1px solid #6b4a26;border-radius:12px;padding:14px;
+font-size:14px;color:#e2c9a4;margin-bottom:18px;line-height:1.6}
+.err{color:#f0806f;text-align:center;margin-top:14px;font-size:15px;line-height:1.6}
+.hide{display:none}
+</style></head>
+<body><div class="wrap">
+<h1 id="store">出退勤</h1>
+
+<div id="v-name">
+<label>お名前</label>
+<input type="text" id="nm" autocomplete="off" placeholder="例：山田花子">
+<button id="go">次へ</button>
+<div class="err" id="e1"></div>
+</div>
+
+<div id="v-act" class="hide">
+<div id="warn" class="warn hide"></div>
+<p class="msg" id="stat"></p>
+<div class="frame" id="frame">タップして撮影</div>
+<input type="file" accept="image/*" capture="user" id="cam" class="hide">
+<button id="shoot" class="sub">写真を撮る</button>
+<button id="act" disabled>出勤する</button>
+<button id="back" class="sub">名前を入れ直す</button>
+<div class="err" id="e2"></div>
+</div>
+
+<div id="v-done" class="hide">
+<p class="msg"><span class="big" id="d1"></span><br><span id="d2"></span></p>
+<button id="again" class="sub">最初に戻る</button>
+</div>
+</div>
+<script>
+var API='https://xloffcmacznuhllhendx.supabase.co/functions/v1/kintai';
+var token=new URLSearchParams(location.search).get('t')||'';
+var photo=null,mode='in';
+function $(i){return document.getElementById(i)}
+function show(v){['v-name','v-act','v-done'].forEach(function(x){
+  $(x).classList.toggle('hide',x!==v)})}
+function post(b){return fetch(API,{method:'POST',
+  headers:{'content-type':'application/json'},body:JSON.stringify(b)})
+  .then(function(r){return r.json()})}
+
+$('go').onclick=function(){
+  var n=$('nm').value.trim();
+  if(!n){$('e1').textContent='名前を入力してください';return}
+  $('go').disabled=true;$('e1').textContent='';
+  post({action:'state',token:token,name:n}).then(function(d){
+    $('go').disabled=false;
+    if(d.error){$('e1').textContent=(d.error==='invalid_token')
+      ?'QRコードが正しくありません':'エラーが発生しました';return}
+    if(d.store_name)$('store').textContent=d.store_name;
+    photo=null;$('frame').textContent='タップして撮影';
+    $('act').disabled=true;$('e2').textContent='';
+    $('warn').classList.add('hide');
+    if(d.missing_out){$('warn').classList.remove('hide');
+      $('warn').textContent=d.missing_out.date+'（'+d.missing_out.clock_in
+      +'出勤）の退勤記録がありません。店長に申告してください。'}
+    $('frame').classList.remove('hide');
+    $('shoot').classList.remove('hide');
+    $('act').classList.remove('hide');
+    if(d.state==='none'){mode='in';
+      $('stat').textContent='写真を撮って出勤してください';
+      $('act').textContent='出勤する'}
+    else if(d.state==='working'){mode='out';
+      $('stat').innerHTML='現在出勤中です（'+d.clock_in+'）<br>退勤する場合はこちら';
+      $('act').textContent='退勤する'}
+    else{mode='';
+      $('stat').innerHTML='本日の勤務は終了しています<br>'+d.clock_in+' → '+d.clock_out;
+      $('frame').classList.add('hide');
+      $('shoot').classList.add('hide');
+      $('act').classList.add('hide')}
+    show('v-act');
+  }).catch(function(){$('go').disabled=false;
+    $('e1').textContent='通信に失敗しました'});
+};
+
+$('shoot').onclick=function(){$('cam').click()};
+$('frame').onclick=function(){$('cam').click()};
+$('cam').onchange=function(e){
+  var f=e.target.files[0];if(!f)return;
+  var url=URL.createObjectURL(f),img=new Image();
+  img.onload=function(){
+    var s=Math.min(1,720/Math.max(img.width,img.height));
+    var c=document.createElement('canvas');
+    c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    photo=c.toDataURL('image/jpeg',0.7);
+    $('frame').innerHTML='';
+    var p=new Image();p.src=photo;$('frame').appendChild(p);
+    $('act').disabled=false;URL.revokeObjectURL(url);
+  };
+  img.onerror=function(){$('e2').textContent='写真の読み込みに失敗しました'};
+  img.src=url;
+};
+
+$('act').onclick=function(){
+  if(!photo){$('e2').textContent='写真を撮ってください';return}
+  var lbl=(mode==='in')?'出勤する':'退勤する';
+  $('act').disabled=true;$('act').textContent='送信中...';$('e2').textContent='';
+  post({action:mode,token:token,name:$('nm').value.trim(),photo:photo})
+  .then(function(d){
+    if(d.error){
+      $('act').disabled=false;$('act').textContent=lbl;
+      var m={already_working:'すでに出勤中です',
+        already_done:'本日の勤務は終了しています',
+        not_working:'出勤記録がありません',
+        bad_name:'名前を確認してください',
+        no_photo:'写真を撮り直してください',
+        photo_too_large:'写真が大きすぎます',
+        invalid_token:'QRコードが正しくありません'};
+      $('e2').textContent=m[d.error]||'エラーが発生しました';return}
+    if(mode==='in'){$('d1').textContent='出勤しました';
+      $('d2').textContent=d.name+'　'+d.time}
+    else{$('d1').textContent='退勤しました';
+      $('d2').innerHTML=d.name+'　'+d.time+'<br>本日の勤務時間：'
+      +d.hours+'時間'+d.minutes+'分'}
+    show('v-done');
+  }).catch(function(){$('act').disabled=false;$('act').textContent=lbl;
+    $('e2').textContent='通信に失敗しました'});
+};
+
+$('back').onclick=function(){show('v-name')};
+$('again').onclick=function(){$('nm').value='';photo=null;show('v-name')};
+</script></body></html>
