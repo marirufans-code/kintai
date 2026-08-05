@@ -2,56 +2,67 @@
 <html lang="ja"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0a0c0d">
+<meta name="theme-color" content="#0d0b09">
 <title>勤務履歴</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#0a0c0d;color:#e9eceb;min-height:100dvh;padding:20px;
-font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
-.wrap{max-width:640px;margin:0 auto}
-h1{font-size:15px;letter-spacing:.2em;color:#8a8f8c;font-weight:500;text-align:center;margin:8px 0 20px}
-h2{font-size:13px;letter-spacing:.14em;color:#e0b13f;font-weight:600;margin:26px 0 12px;
-border-bottom:1px solid #262b29;padding-bottom:8px}
-label{display:block;font-size:13px;color:#9ba39f;margin:12px 0 6px}
-input,select{width:100%;font-size:16px;padding:13px;border-radius:11px;
-border:1px solid #262b29;background:#131615;color:#fff}
-input:focus,select:focus{outline:none;border-color:#e0b13f}
+body{margin:0;color:#f3efe8;min-height:100dvh;padding:20px;position:relative;
+font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+background:#0d0b09 url('./IMG_1119.jpeg') center/cover no-repeat fixed}
+body::before{content:'';position:fixed;inset:0;
+background:linear-gradient(180deg,rgba(8,7,6,.62) 0%,rgba(8,7,6,.5) 45%,rgba(8,7,6,.72) 100%)}
+.wrap{max-width:640px;margin:0 auto;position:relative;z-index:1}
+.logo{display:block;width:100%;max-width:190px;margin:6px auto 18px;
+filter:drop-shadow(0 3px 16px rgba(0,0,0,.95))}
+h2{font-size:13px;letter-spacing:.14em;color:#c9a961;font-weight:600;margin:26px 0 12px;
+border-bottom:1px solid rgba(210,190,150,.24);padding-bottom:8px;
+text-shadow:0 2px 10px rgba(0,0,0,1)}
+label{display:block;font-size:13px;color:#d6cec2;margin:12px 0 6px;
+text-shadow:0 2px 10px rgba(0,0,0,1)}
+input{width:100%;font-size:16px;padding:13px;border-radius:11px;
+border:1px solid rgba(210,190,150,.32);background:rgba(12,11,10,.75);color:#fff;
+backdrop-filter:blur(10px)}
+input:focus{outline:none;border-color:#c9a961}
 .f2{display:flex;gap:10px}.f2>div{flex:1}
 button{font-size:16px;font-weight:700;padding:15px;border:none;border-radius:12px;
-margin-top:14px;color:#1a1204;background:#e0b13f;width:100%}
-button.sub{background:#161a19;color:#a6afab;border:1px solid #2c322f;
-font-size:12px;padding:9px 13px;width:auto;margin:0}
-button.dng{background:#1e100e;color:#d05a4e;border:1px solid #4c2320}
-.nav{display:flex;gap:8px;justify-content:center;margin-bottom:6px;flex-wrap:wrap}
-.nav a{font-size:13px;color:#a6afab;background:#161a19;border:1px solid #2c322f;
-border-radius:9px;padding:9px 14px;text-decoration:none}
-.nav a.on{background:#e0b13f;color:#1a1204;border-color:#e0b13f}
-.row{background:#131615;border:1px solid #262b29;border-radius:12px;
-padding:14px 15px;margin-bottom:8px}
+margin-top:14px;color:#17120a;background:#c9a961;width:100%;
+box-shadow:0 6px 22px rgba(0,0,0,.6)}
+button.sub{background:rgba(14,13,11,.78);color:#cdc4b6;
+border:1px solid rgba(210,190,150,.28);font-size:12px;padding:9px 13px;width:auto;
+margin:0;box-shadow:none;backdrop-filter:blur(10px)}
+button.dng{background:rgba(40,16,14,.85);color:#f08a80;border:1px solid #6b2f2a}
+.nav{display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.nav a{font-size:13px;color:#cdc4b6;background:rgba(14,13,11,.78);
+border:1px solid rgba(210,190,150,.28);border-radius:9px;padding:9px 14px;
+text-decoration:none;backdrop-filter:blur(10px)}
+.nav a.on{background:#c9a961;color:#17120a;border-color:#c9a961}
+.row{background:rgba(13,12,11,.78);border:1px solid rgba(210,190,150,.2);
+border-radius:12px;padding:14px 15px;margin-bottom:8px;backdrop-filter:blur(10px)}
 .row .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .nm{font-size:17px;font-weight:600}
-.tm{font-size:16px;color:#e0b13f;font-variant-numeric:tabular-nums}
-.meta{font-size:12px;color:#7b8380;margin-top:5px}
-.dt{font-size:12px;color:#8a8f8c;margin-bottom:3px}
+.tm{font-size:16px;color:#e0c07a;font-variant-numeric:tabular-nums}
+.meta{font-size:12px;color:#a89e90;margin-top:5px}
+.dt{font-size:12px;color:#b8afa2;margin-bottom:3px}
 .pics{display:flex;gap:9px;margin-top:11px}
 .pics div{flex:1}
-.pics span{font-size:11px;color:#7b8380;display:block;margin-bottom:5px}
-.pics img{width:100%;border-radius:9px;display:block;background:#1c211f}
+.pics span{font-size:11px;color:#a89e90;display:block;margin-bottom:5px}
+.pics img{width:100%;border-radius:9px;display:block;background:#1c1917}
 .acts{display:flex;gap:7px;margin-top:11px}
 .sum{display:flex;justify-content:space-between;padding:13px 15px;
-background:#131615;border:1px solid #262b29;border-radius:12px;margin-bottom:8px}
+background:rgba(13,12,11,.78);border:1px solid rgba(210,190,150,.2);
+border-radius:12px;margin-bottom:8px;backdrop-filter:blur(10px)}
 .sum .h{font-size:16px;font-weight:600}
 .sum .v{text-align:right}
-.sum .v b{font-size:17px;color:#e0b13f;font-variant-numeric:tabular-nums}
-.sum .v small{display:block;font-size:11px;color:#7b8380;margin-top:3px}
-.empty{color:#5f6764;font-size:14px;padding:8px 2px}
-.err{color:#ef8272;font-size:14px;margin-top:12px;text-align:center}
+.sum .v b{font-size:17px;color:#e0c07a;font-variant-numeric:tabular-nums}
+.sum .v small{display:block;font-size:11px;color:#a89e90;margin-top:3px}
+.empty{color:#8a8276;font-size:14px;padding:8px 2px}
+.err{color:#ffa294;font-size:14px;margin-top:12px;text-align:center}
 .hide{display:none}
 </style></head>
 <body><div class="wrap">
 
 <div id="v-login">
-<h1>勤務履歴</h1>
+<img class="logo" src="./IMG_1043.jpeg" alt="">
 <label>メールアドレス</label>
 <input type="email" id="em" autocapitalize="none" spellcheck="false">
 <label>パスワード</label>
@@ -61,7 +72,7 @@ background:#131615;border:1px solid #262b29;border-radius:12px;margin-bottom:8px
 </div>
 
 <div id="v-main" class="hide">
-<h1 id="store">勤務履歴</h1>
+<img class="logo" src="./IMG_1043.jpeg" alt="">
 <div class="nav">
 <a href="./admin.html">本日</a>
 <a href="./history.html" class="on">履歴</a>
@@ -81,7 +92,7 @@ background:#131615;border:1px solid #262b29;border-radius:12px;margin-bottom:8px
 <h2>集計</h2>
 <div id="summary"></div>
 
-<h2>明細 <span id="cnt" style="color:#5f6764;font-size:11px"></span></h2>
+<h2>明細 <span id="cnt" style="color:#8a8276;font-size:11px"></span></h2>
 <div id="list"></div>
 </div>
 
@@ -122,9 +133,6 @@ $('login').onclick = async () => {
 async function start() {
   $('v-login').classList.add('hide');
   $('v-main').classList.remove('hide');
-
-  const { data: s } = await sb.from('stores').select('name').limit(1).maybeSingle();
-  if (s) $('store').textContent = s.name;
 
   const { data: st } = await sb.from('staff').select('name_key,hourly_wage');
   if (st) for (const r of st) wages[r.name_key] = r.hourly_wage;
@@ -169,11 +177,11 @@ async function run() {
     const a = agg[k];
     const w = wages[k];
     const pay = w ? '<small>' + yen(a.sec / 3600 * w) + '（時給' + w + '円）</small>' : '';
-    const warn = a.openCount ? '<small style="color:#d05a4e">未退勤 ' + a.openCount + '件</small>' : '';
+    const warn = a.openCount ? '<small style="color:#f08a80">未退勤 ' + a.openCount + '件</small>' : '';
     const el = document.createElement('div');
     el.className = 'sum';
     el.innerHTML = '<div><div class="h">' + esc(a.name) + '</div>' +
-      '<small style="color:#7b8380">' + a.days + '日</small></div>' +
+      '<small style="color:#a89e90">' + a.days + '日</small></div>' +
       '<div class="v"><b>' + hhmm(a.sec) + '</b>' + pay + warn + '</div>';
     $('summary').appendChild(el);
   }
@@ -197,14 +205,13 @@ function card(r) {
     : hm(r.clock_in_at) + ' → —';
   const d = r.clock_out_at
     ? hhmm(secs(r.clock_in_at, r.clock_out_at))
-    : '<span style="color:#d05a4e">退勤記録なし</span>';
+    : '<span style="color:#f08a80">退勤記録なし</span>';
 
   el.innerHTML = '<div class="dt">' + md(r.business_date) + '</div>' +
     '<div class="top"><span class="nm">' + esc(r.staff_name) + '</span>' +
     '<span class="tm">' + t + '</span></div>' +
     '<div class="meta">' + d + '</div>' +
-    '<div class="pics hide"></div>' +
-    '<div class="acts hide"></div>';
+    '<div class="pics hide"></div><div class="acts hide"></div>';
 
   const pics = el.querySelector('.pics');
   const acts = el.querySelector('.acts');
@@ -214,31 +221,23 @@ function card(r) {
   del.textContent = 'この記録を削除';
   del.onclick = async (ev) => {
     ev.stopPropagation();
-    const label = r.staff_name + '　' + md(r.business_date) + '　' + t;
-    if (!confirm('この記録を完全に削除します。元に戻せません。\n\n' + label)) return;
-    del.disabled = true;
-    del.textContent = '削除中...';
-
+    if (!confirm('この記録を完全に削除します。元に戻せません。\n\n' +
+      r.staff_name + '　' + md(r.business_date) + '　' + t)) return;
+    del.disabled = true; del.textContent = '削除中...';
     const paths = [r.clock_in_photo_path, r.clock_out_photo_path].filter(Boolean);
     if (paths.length) await sb.storage.from('attendance-photos').remove(paths);
-
     const { error } = await sb.from('attendances').delete().eq('id', r.id);
-    if (error) { del.disabled = false; del.textContent = '削除失敗: ' + error.message; return; }
-    el.remove();
-    run();
+    if (error) { del.disabled = false; del.textContent = '削除失敗'; return; }
+    el.remove(); run();
   };
   acts.appendChild(del);
 
   el.onclick = async () => {
     if (open.has(r.id)) {
-      open.delete(r.id);
-      pics.classList.add('hide');
-      acts.classList.add('hide');
-      return;
+      open.delete(r.id); pics.classList.add('hide'); acts.classList.add('hide'); return;
     }
     open.add(r.id);
-    pics.classList.remove('hide');
-    acts.classList.remove('hide');
+    pics.classList.remove('hide'); acts.classList.remove('hide');
     pics.innerHTML = '<div class="empty">読み込み中...</div>';
     const [a, b] = await Promise.all([pic(r.clock_in_photo_path), pic(r.clock_out_photo_path)]);
     pics.innerHTML =
