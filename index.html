@@ -2,53 +2,54 @@
 <html lang="ja"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0b0d">
+<meta name="theme-color" content="#0b0e0d">
 <title>出退勤</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#0b0b0d;color:#f2ece1;min-height:100dvh;display:flex;
+body{margin:0;background:#0b0e0d;color:#e9efec;min-height:100dvh;display:flex;
 flex-direction:column;justify-content:center;padding:24px;
 font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
 .wrap{max-width:460px;margin:0 auto;width:100%}
-h1{font-size:14px;letter-spacing:.22em;color:#8a8578;font-weight:500;text-align:center;margin:0 0 26px}
-label{display:block;font-size:15px;color:#a9a396;margin-bottom:12px;text-align:center}
+h1{font-size:14px;letter-spacing:.24em;color:#7f948c;font-weight:500;text-align:center;margin:0 0 26px}
+label{display:block;font-size:15px;color:#93a8a0;margin-bottom:12px;text-align:center}
 input[type=text]{width:100%;font-size:24px;padding:18px;border-radius:14px;
-border:1px solid #2a2a2e;background:#151518;color:#fff;margin-bottom:4px}
-input[type=text]:focus{outline:none;border-color:#d4a556}
+border:1px solid #232b29;background:#131817;color:#fff}
+input[type=text]:focus{outline:none;border-color:#5fc9a0}
 button{width:100%;font-size:22px;font-weight:700;padding:24px;border:none;
-border-radius:16px;margin-top:14px;color:#0b0b0d;background:#d4a556}
-button.name{background:#17171b;color:#f2ece1;border:1px solid #33333a;
+border-radius:16px;margin-top:14px;color:#04140f;background:#5fc9a0}
+button.name{background:#131817;color:#e9efec;border:1px solid #2b3634;
 font-size:21px;padding:22px;margin-top:11px}
-button.sub{background:#1e1e22;color:#c9c3b7;border:1px solid #33333a;font-size:15px;padding:14px}
-button:disabled{opacity:.35}
+button.name:active{border-color:#5fc9a0}
+button.sub{background:#161c1a;color:#a9bcb4;border:1px solid #2b3634;font-size:15px;padding:14px}
+button:disabled{opacity:.3}
 .frame{margin-top:18px;width:100%;aspect-ratio:3/4;border-radius:16px;
-border:1px dashed #3a3a42;background:#151518;display:flex;align-items:center;
-justify-content:center;color:#6d6862;font-size:15px;overflow:hidden}
+border:1px dashed #35423f;background:#131817;display:flex;align-items:center;
+justify-content:center;color:#6b7a75;font-size:15px;overflow:hidden}
 .frame img{width:100%;height:100%;object-fit:cover}
 .msg{text-align:center;font-size:17px;line-height:1.75;margin:0}
 .who{text-align:center;font-size:23px;font-weight:600;margin-bottom:14px}
-.big{font-size:32px;font-weight:700;color:#d4a556}
-.warn{background:#2a1d14;border:1px solid #6b4a26;border-radius:12px;padding:14px;
-font-size:14px;color:#e2c9a4;margin-bottom:18px;line-height:1.6}
+.big{font-size:32px;font-weight:700;color:#5fc9a0}
+.warn{background:#1e2418;border:1px solid #4d5c37;border-radius:12px;padding:14px;
+font-size:14px;color:#cfdcae;margin-bottom:18px;line-height:1.6}
 .err{color:#f0806f;text-align:center;margin-top:14px;font-size:15px;line-height:1.6}
 .hide{display:none}
 </style></head>
 <body><div class="wrap">
 <h1 id="store">出退勤</h1>
 
-<div id="v-pick">
-<label>名前を選んでください</label>
-<div id="names"></div>
-<button id="other" class="sub">名前を入力する</button>
-<div class="err" id="e0"></div>
-</div>
-
-<div id="v-name" class="hide">
+<div id="v-name">
 <label>お名前</label>
 <input type="text" id="nm" autocomplete="off" placeholder="例：山田花子">
 <button id="go">次へ</button>
-<button id="toPick" class="sub">一覧から選ぶ</button>
+<button id="toPick" class="sub hide">一覧から選ぶ</button>
 <div class="err" id="e1"></div>
+</div>
+
+<div id="v-pick" class="hide">
+<label>名前を選んでください</label>
+<div id="names"></div>
+<button id="toName" class="sub">名前を入力する</button>
+<div class="err" id="e0"></div>
 </div>
 
 <div id="v-act" class="hide">
@@ -73,7 +74,7 @@ var BASE='https://xloffcmacznuhllhendx.supabase.co/functions/v1/';
 var token=new URLSearchParams(location.search).get('t')||'';
 var photo=null,mode='in',name='';
 function $(i){return document.getElementById(i)}
-function show(v){['v-pick','v-name','v-act','v-done'].forEach(function(x){
+function show(v){['v-name','v-pick','v-act','v-done'].forEach(function(x){
   $(x).classList.toggle('hide',x!==v)})}
 function post(fn,b){b.token=token;return fetch(BASE+fn,{method:'POST',
   headers:{'content-type':'application/json'},body:JSON.stringify(b)})
@@ -81,8 +82,7 @@ function post(fn,b){b.token=token;return fetch(BASE+fn,{method:'POST',
 
 post('names',{}).then(function(d){
   if(d.store_name)$('store').textContent=d.store_name;
-  if(d.error){$('e0').textContent='QRコードが正しくありません';return}
-  if(!d.names||!d.names.length){show('v-name');return}
+  if(d.error||!d.names||!d.names.length)return;
   var box=$('names');box.innerHTML='';
   d.names.forEach(function(n){
     var b=document.createElement('button');
@@ -90,10 +90,11 @@ post('names',{}).then(function(d){
     b.onclick=function(){name=n;checkState()};
     box.appendChild(b);
   });
-}).catch(function(){$('e0').textContent='通信に失敗しました'});
+  $('toPick').classList.remove('hide');
+}).catch(function(){});
 
-$('other').onclick=function(){$('nm').value='';show('v-name')};
 $('toPick').onclick=function(){show('v-pick')};
+$('toName').onclick=function(){$('nm').value='';show('v-name')};
 $('go').onclick=function(){
   var n=$('nm').value.trim();
   if(!n){$('e1').textContent='名前を入力してください';return}
@@ -175,6 +176,6 @@ $('act').onclick=function(){
     $('e2').textContent='通信に失敗しました'});
 };
 
-$('back').onclick=function(){show('v-pick')};
-$('again').onclick=function(){name='';photo=null;location.reload()};
+$('back').onclick=function(){show('v-name')};
+$('again').onclick=function(){location.reload()};
 </script></body></html>
